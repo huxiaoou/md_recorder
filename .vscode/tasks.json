@@ -10,6 +10,7 @@
                 "${file}",
                 "QOperator.cpp",
                 "QListener.cpp",
+                "QAnalyst.cpp",
                 "../lib/thostmduserapi_se.so",
                 "-o",
                 "${workspaceFolder}/bin/${workspaceFolderBasename}",

@@ -1,17 +1,12 @@
 #pragma once
 #include <queue>
+#include <variant>
 #include "ThostFtdcUserApiStruct.h"
 
 namespace QUtility
 {
-    class MsgNode
-    {
-    public:
-        virtual ~MsgNode() = default;
-    };
-
     //  ------ Node definition 0: API state for trader-api and md-api ------
-    enum class ValApiState
+    enum class ApiState
     {
         READY,
         CONNECTED,
@@ -23,28 +18,21 @@ namespace QUtility
         ALL_INQUIRED_CONTRACTS_RECEIVED,
         DISCONNECTED
     };
-    class MsgNodeApiState : public MsgNode
-    {
-    private:
-        ValApiState _valApiState;
-
-    public:
-        MsgNodeApiState(ValApiState valApiState) : _valApiState(valApiState) {}
-    };
 
     //  ------ Node definition 1: frontId and sessionId ------
-    class MsgNodeFrtSessId : public MsgNode
+    class FrtSessId
     {
     private:
         TThostFtdcFrontIDType _frontId;
         TThostFtdcSessionIDType _sessionId;
 
     public:
-        MsgNodeFrtSessId(TThostFtdcFrontIDType frontId, TThostFtdcSessionIDType sessionId) : _frontId(frontId), _sessionId(sessionId) {}
-        void SetValue(TThostFtdcFrontIDType frontId, TThostFtdcSessionIDType sessionId);
+        FrtSessId(TThostFtdcFrontIDType frontId, TThostFtdcSessionIDType sessionId) : _frontId(frontId), _sessionId(sessionId) {}
         const TThostFtdcFrontIDType GetFrontId() const { return _frontId; }
         const TThostFtdcSessionIDType GetSessionId() const { return _sessionId; }
     };
 
+    // using std::variant
+    typedef std::variant<ApiState, FrtSessId, CThostFtdcDepthMarketDataField*> MsgNode;
     typedef std::queue<MsgNode *> QueueMsg;
 }

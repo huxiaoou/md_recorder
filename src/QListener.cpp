@@ -5,22 +5,22 @@ namespace QUtility
     void QListenerMd::OnFrontConnected()
     {
         std::cout << "... front address connected" << std::endl;
-        MsgNodeApiState *s = new MsgNodeApiState(ValApiState::CONNECTED);
-        _pOperatorMsg->Push(s);
+        MsgNode *x = new MsgNode(ApiState::CONNECTED);
+        _pOperatorMsg->Push(x);
     }
 
     void QListenerMd::OnFrontDisconnected(int nReason)
     {
         std::cout << "... front address disconnected" << std::endl;
-        MsgNodeApiState *s = new MsgNodeApiState(ValApiState::DISCONNECTED);
-        _pOperatorMsg->Push(s);
+        MsgNode *x = new MsgNode(ApiState::DISCONNECTED);
+        _pOperatorMsg->Push(x);
     }
 
     void QListenerMd::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
     {
         std::cout << "... logged in" << std::endl;
-        MsgNodeApiState *s = new MsgNodeApiState(ValApiState::LOGGED_IN);
-        _pOperatorMsg->Push(s);
+        MsgNode *x = new MsgNode(ApiState::LOGGED_IN);
+        _pOperatorMsg->Push(x);
     }
 
     void QListenerMd::OnRspSubMarketData(CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)

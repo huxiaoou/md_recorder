@@ -15,11 +15,12 @@ namespace QUtility
         _cv.notify_all();
     }
 
-    void QOperatorMsg::GetFrontAndPop(QUtility::MsgNode *pNode)
+    QUtility::MsgNode *QOperatorMsg::GetFrontAndPop()
     {
         std::unique_lock<std::mutex> lck(_mutex);
-        pNode = _pQueue->front();
+        QUtility::MsgNode *pNode = _pQueue->front();
         _pQueue->pop();
+        return pNode;
     }
 
     void QOperatorMsg::Wait()

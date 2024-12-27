@@ -1,3 +1,5 @@
+#pragma once
+#include <queue>
 #include "ThostFtdcUserApiStruct.h"
 
 namespace QUtility
@@ -6,7 +8,6 @@ namespace QUtility
     {
     public:
         virtual ~MsgNode() = default;
-        virtual void print() const = 0; // 纯虚函数，要求派生类实现
     };
 
     //  ------ Node definition 0: API state for trader-api and md-api ------
@@ -44,4 +45,6 @@ namespace QUtility
         const TThostFtdcFrontIDType GetFrontId() const { return _frontId; }
         const TThostFtdcSessionIDType GetSessionId() const { return _sessionId; }
     };
+
+    typedef std::queue<MsgNode *> QueueMsg;
 }

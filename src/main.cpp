@@ -1,8 +1,10 @@
-#include "QOperator.h"
 #include <iostream>
+#include "QOperator.h"
+#include "QListener.h"
 
-int main(){
-    QUtility::OperatorMsg* operatorMsg = new QUtility::OperatorMsg();
-    operatorMsg->Init("OperatorMsg");
-    std::cout << "hello, world" << std::endl;
+int main()
+{
+    QUtility::QOperatorMsg *operatorMsg = new QUtility::QOperatorMsg("OperatorMsg");
+    QUtility::QListenerMd *listenerMd = new QUtility::QListenerMd(operatorMsg);
+    std::cout << "Googbye" << std::endl;
 }

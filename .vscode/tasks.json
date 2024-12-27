@@ -9,6 +9,7 @@
                 "-g",
                 "${file}",
                 "QOperator.cpp",
+                "QListener.cpp",
                 "../lib/thostmduserapi_se.so",
                 "-o",
                 "${workspaceFolder}/bin/${workspaceFolderBasename}",

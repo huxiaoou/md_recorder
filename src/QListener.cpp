@@ -34,9 +34,7 @@ namespace QUtility
 
     void QListenerMd::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketData)
     {
-        std::cout << pDepthMarketData->ActionDay << " "
-                  << pDepthMarketData->InstrumentID << " "
-                  << pDepthMarketData->LastPrice
-                  << std::endl;
+        MsgNode *x = new MsgNode(pDepthMarketData);
+        _pOperatorMsg->Push(x);
     }
 }

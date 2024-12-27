@@ -28,7 +28,6 @@ namespace QUtility
                 if (std::holds_alternative<ApiState>(*x))
                 {
                     ApiState s = std::get<ApiState>(*x);
-                    std::cout << "ApiState = " << static_cast<unsigned>(s) << std::endl;
                     process_api_state(s);
                 }
                 else if (std::holds_alternative<FrtSessId>(*x))
@@ -93,16 +92,30 @@ namespace QUtility
 
     void QAnalyst::reqSubscribe()
     {
-        char *contracts[3] = {(char *)"rb2505", (char *)"CF505", (char *)"m2405"};
-        _api->SubscribeMarketData(contracts, 3);
+        char *contracts[9] = {
+            (char *)"rb2505",
+            (char *)"hc2505",
+            (char *)"ru2505",
+            (char *)"CF505",
+            (char *)"SR505",
+            (char *)"TA505",
+            (char *)"y2505",
+            (char *)"m2505",
+            (char *)"p2505",
+        };
+        _api->SubscribeMarketData(contracts, 9);
         std::cout << "... req to subscribe" << std::endl;
     }
 
     void QAnalyst::record(CThostFtdcDepthMarketDataField *pDmd)
     {
-        std::cout << pDmd->ActionDay << " "
-                  << pDmd->InstrumentID << " "
-                  << pDmd->LastPrice
+        std::cout << "| "
+                  << pDmd->ActionDay << " | "
+                  << pDmd->TradingDay << " | "
+                  << pDmd->UpdateTime << " | "
+                  << std::setw(3) << pDmd->UpdateMillisec << " | "
+                  << std::setw(6) << pDmd->InstrumentID << " | "
+                  << std::setw(8) << pDmd->LastPrice << " |"
                   << std::endl;
     }
 }

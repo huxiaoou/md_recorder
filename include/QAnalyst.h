@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 #include "ThostFtdcMdApi.h"
 #include "QOperator.h"
 

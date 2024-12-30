@@ -12,6 +12,7 @@
                 "QListener.cpp",
                 "QAnalyst.cpp",
                 "../lib/thostmduserapi_se.so",
+                "../lib/libqtools.so",
                 "-o",
                 "${workspaceFolder}/bin/${workspaceFolderBasename}",
                 "-I../include",

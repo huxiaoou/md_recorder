@@ -11,12 +11,11 @@
                 "QOperator.cpp",
                 "QListener.cpp",
                 "QAnalyst.cpp",
-                "../lib/thostmduserapi_se.so",
-                "../lib/libqtools.so",
+                "-I../include",
+                "-lthostmduserapi_se",
+                "-lqtools",
                 "-o",
                 "${workspaceFolder}/bin/${workspaceFolderBasename}",
-                "-I../include",
-                "-L../lib",
             ],
             "options": {
                 "cwd": "${fileDirname}"

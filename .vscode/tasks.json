@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
+                "QConfig.cpp",
                 "QOperator.cpp",
                 "QListener.cpp",
                 "QAnalyst.cpp",

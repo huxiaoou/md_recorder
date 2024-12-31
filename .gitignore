@@ -1,4 +1,3 @@
-cons/*
+*.con
 bin/*
-lib/*so
 build/*

@@ -3,7 +3,7 @@ project(md_recorder)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-set(SRC_LIST src/main.cpp src/QOperator.cpp src/QListener.cpp src/QAnalyst.cpp)
+set(SRC_LIST src/main.cpp src/QConfig.cpp src/QOperator.cpp src/QListener.cpp src/QAnalyst.cpp)
 
 find_library(LIB_QTOOLS libqtools.so)
 find_library(LIB_MD libthostmduserapi_se.so)

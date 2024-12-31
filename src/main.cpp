@@ -1,4 +1,5 @@
 #include <iostream>
+#include "QConfig.h"
 #include "QAccount.h"
 #include "QOperator.h"
 #include "QListener.h"
@@ -6,7 +7,10 @@
 
 int main()
 {
-    QUtility::Account *account = new QUtility::Account("/home/ubuntu/deploy/account_md");
+    char config_path[60] = "../conf/md.conf";
+
+    QUtility::ConfigMd *configMd = new QUtility::ConfigMd(config_path);
+    QUtility::Account *account = new QUtility::Account(configMd->GetAccountFilePath());
     account->Display();
 
     QUtility::QOperatorMsg *operatorMsg = new QUtility::QOperatorMsg("OperatorMsg");

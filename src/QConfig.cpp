@@ -16,7 +16,7 @@ namespace QUtility
         display();
         if (res != 7)
         {
-            std::cout << "Fail to initialize configuration" << std::endl;
+            std::cout << "Failed to initialize configuration" << std::endl;
             std::cout << "Please check again" << std::endl;
             std::exit(-1);
         }

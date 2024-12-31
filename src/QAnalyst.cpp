@@ -2,7 +2,7 @@
 
 namespace QUtility
 {
-    QAnalyst::QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, Account *pAccount)
+    QAnalyst::QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, QAccount *pAccount)
     {
         _pAccount = pAccount;
         _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());

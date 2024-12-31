@@ -10,7 +10,7 @@ int main()
     char config_path[60] = "../conf/md.conf";
 
     QUtility::ConfigMd *configMd = new QUtility::ConfigMd(config_path);
-    QUtility::Account *account = new QUtility::Account(configMd->GetAccountFilePath());
+    QUtility::QAccount *account = new QUtility::QAccount(configMd->GetAccountFilePath());
     account->Display();
 
     QUtility::QOperatorMsg *operatorMsg = new QUtility::QOperatorMsg("OperatorMsg");

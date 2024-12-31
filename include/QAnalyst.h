@@ -12,11 +12,11 @@ namespace QUtility
     private:
         CThostFtdcMdApi *_api;
         QOperatorMsg *_pOperaterMsg;
-        Account* _pAccount;
+        QAccount* _pAccount;
         unsigned int requestId;
 
     public:
-        QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, Account *pAccount);
+        QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, QAccount *pAccount);
         void init();
         void thread_main();
         void process_api_state(ApiState s);

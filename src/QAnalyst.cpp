@@ -2,9 +2,10 @@
 
 namespace QUtility
 {
-    QAnalyst::QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi)
+    QAnalyst::QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, Account *pAccount)
     {
-        _api = CThostFtdcMdApi::CreateFtdcMdApi("../cons/");
+        _pAccount = pAccount;
+        _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());
         _api->RegisterSpi(spi);
         _pOperaterMsg = pOperaterMsg;
         requestId = 0;
@@ -69,8 +70,7 @@ namespace QUtility
 
     void QAnalyst::reqConnect()
     {
-        char front_address[] = "tcp://116.236.253.145:42213";
-        _api->RegisterFront(front_address);
+        _api->RegisterFront(_pAccount->GetFrntAddr());
         std::cout << "... req to connect" << std::endl;
     }
 
@@ -83,9 +83,9 @@ namespace QUtility
     {
         CThostFtdcReqUserLoginField req;
         memset(&req, 0, sizeof(req));
-        strcpy(req.BrokerID, "95533");
-        strcpy(req.UserID, "51710159");
-        strcpy(req.Password, "*******");
+        strcpy(req.BrokerID, _pAccount->GetBrokerID());
+        strcpy(req.UserID, _pAccount->GetInvstrID());
+        strcpy(req.Password, _pAccount->GetPassword());
         _api->ReqUserLogin(&req, requestId++);
         std::cout << "... req to log in" << std::endl;
     }

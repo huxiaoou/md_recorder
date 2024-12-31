@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "ThostFtdcMdApi.h"
 #include "QOperator.h"
+#include "QAccount.h"
 
 namespace QUtility
 {
@@ -11,10 +12,11 @@ namespace QUtility
     private:
         CThostFtdcMdApi *_api;
         QOperatorMsg *_pOperaterMsg;
+        Account* _pAccount;
         unsigned int requestId;
 
     public:
-        QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi);
+        QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, Account *pAccount);
         void init();
         void thread_main();
         void process_api_state(ApiState s);

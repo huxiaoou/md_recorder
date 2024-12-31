@@ -11,7 +11,7 @@ int main()
 
     QUtility::QOperatorMsg *operatorMsg = new QUtility::QOperatorMsg("OperatorMsg");
     QUtility::QListenerMd *listenerMd = new QUtility::QListenerMd(operatorMsg);
-    QUtility::QAnalyst *analyst = new QUtility::QAnalyst(operatorMsg, listenerMd);
+    QUtility::QAnalyst *analyst = new QUtility::QAnalyst(operatorMsg, listenerMd, account);
     analyst->init();
     analyst->thread_main();
 }

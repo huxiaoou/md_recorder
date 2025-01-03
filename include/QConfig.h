@@ -21,6 +21,6 @@ namespace QUtility
         const char *GetAccountFilePath() const { return _accountFilePath; }
         const char *GetMdSaveRootDir() const { return _mdSaveRootDir; }
         const char *GetSubscribedFile() const { return _subscribedFile; }
-        void display() const;
+        void Display() const;
     };
 }

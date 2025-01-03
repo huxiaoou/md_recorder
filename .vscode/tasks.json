@@ -12,6 +12,7 @@
                 "QOperator.cpp",
                 "QListener.cpp",
                 "QAnalyst.cpp",
+                "QAutomatic.cpp",
                 "-I../include",
                 "-lthostmduserapi_se",
                 "-lqtools",

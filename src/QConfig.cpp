@@ -13,7 +13,6 @@ namespace QUtility
             fin.getline(text_line, sizeof(text_line));
             res += match(text_line);
         }
-        display();
         if (res != 15) // 15 = 1 + 2 + 4 + 8
         {
             std::cout << "Failed to initialize configuration" << std::endl;
@@ -22,7 +21,7 @@ namespace QUtility
         }
     }
 
-    void ConfigMd::display() const
+    void ConfigMd::Display() const
     {
         std::cout << "MD CONFIG SUMMARY:" << std::endl;
         std::cout << "------CALENDAR PATH    :" << _calendarPath << std::endl;

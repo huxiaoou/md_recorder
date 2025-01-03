@@ -7,18 +7,33 @@ namespace QUtility
         _pAccount = pAccount;
         _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());
         _api->RegisterSpi(spi);
+        _spi = spi;
         _pOperaterMsg = pOperaterMsg;
         requestId = 0;
     }
 
-    void QAnalyst::init()
+    void QAnalyst::go()
     {
-        reqConnect();
-        _api->Init();
+        std::thread tMain(&QAnalyst::thread_main, this);
+        std::thread tQuit(&QAnalyst::thread_quit, this);
+        tMain.join();
+        tQuit.join();
+    }
+
+    void QAnalyst::thread_quit()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            std::cout << "check for quit" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+        MsgNode *x = new MsgNode(ApiState::QUIT);
+        _pOperaterMsg->Push(x);
     }
 
     void QAnalyst::thread_main()
     {
+        init();
         while (true)
         {
             if (_pOperaterMsg->GetSize() == 0)
@@ -29,7 +44,8 @@ namespace QUtility
                 if (std::holds_alternative<ApiState>(*x))
                 {
                     ApiState s = std::get<ApiState>(*x);
-                    process_api_state(s);
+                    if (process_api_state(s) == -1)
+                        break;
                 }
                 else if (std::holds_alternative<FrtSessId>(*x))
                 {
@@ -50,22 +66,31 @@ namespace QUtility
         _api->Join();
     }
 
-    void QAnalyst::process_api_state(ApiState s)
+    int QAnalyst::process_api_state(ApiState s)
     {
         switch (s)
         {
         case ApiState::DISCONNECTED:
             reqReConnect();
-            break;
+            return 0;
         case ApiState::CONNECTED:
             reqLogIn();
-            break;
+            return 0;
         case ApiState::LOGGED_IN:
             reqSubscribe();
-            break;
+            return 0;
+        case ApiState::QUIT:
+            reqRelease();
+            return -1;
         default:
-            break;
+            return 0;
         }
+    }
+
+    void QAnalyst::init()
+    {
+        reqConnect();
+        _api->Init();
     }
 
     void QAnalyst::reqConnect()
@@ -117,5 +142,21 @@ namespace QUtility
                   << std::setw(6) << pDmd->InstrumentID << " | "
                   << std::setw(8) << pDmd->LastPrice << " |"
                   << std::endl;
+    }
+
+    void QAnalyst::reqRelease()
+    {
+        if (_api)
+        {
+            _api->RegisterSpi(NULL);
+            _api->Release();
+            _api = NULL;
+        }
+        if (_spi)
+        {
+            delete _spi;
+            _spi = NULL;
+        }
+        std::cout << "... req to release" << std::endl;
     }
 }

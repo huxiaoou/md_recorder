@@ -16,7 +16,8 @@ namespace QUtility
         SETTLEMENT_CONFIRMED,
         TRADING_ACCOUNT_CONFIRMED,
         ALL_INQUIRED_CONTRACTS_RECEIVED,
-        DISCONNECTED
+        DISCONNECTED,
+        QUIT
     };
 
     //  ------ Node definition 1: frontId and sessionId ------

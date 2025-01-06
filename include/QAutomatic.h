@@ -5,5 +5,5 @@
 
 namespace QUtility
 {
-    const QUtility::QSection *match_section(const char *calendarPath);
+    const QSection *match_section(const char *calendarPath);
 }

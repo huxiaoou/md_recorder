@@ -2,25 +2,24 @@
 
 namespace QUtility
 {
-    const QUtility::QSection *match_section(const char *calendarPath)
+    const QSection *match_section(const char *calendarPath)
     {
-        QUtility::QTimePoint *now = new QUtility::QTimePoint();
-
+        QTimestamp now;
         char prev_date[12] = "";
         char this_date[12] = "";
-        QUtility::match_trade_date(now->getTs(), this_date, prev_date, calendarPath);
-        std::cout << "Now = " << *now << ", it is in \n"
+        match_trade_date(now, this_date, prev_date, calendarPath);
+        std::cout << "Now = " << now << ", it is in \n"
                   << "('" << prev_date << "', '" << this_date << "')" << std::endl;
-        QUtility::QSection *secD = new QUtility::QSection(this_date, prev_date, 'D');
-        QUtility::QSection *secN = new QUtility::QSection(this_date, prev_date, 'N');
-        QUtility::QSection *sec = NULL;
-        if (secD->hasTimepoint(now))
+        QSection *secD = new QSection(this_date, prev_date, 'D');
+        QSection *secN = new QSection(this_date, prev_date, 'N');
+        QSection *sec = NULL;
+        if (secD->hasTimepoint(&now))
         {
             std::cout << *secD << "is chosen" << std::endl;
             sec = secD;
             delete secN;
         }
-        else if (secN->hasTimepoint(now))
+        else if (secN->hasTimepoint(&now))
         {
             std::cout << *secN << "is chosen" << std::endl;
             sec = secN;

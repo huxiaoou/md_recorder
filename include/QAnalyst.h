@@ -7,6 +7,7 @@
 #include "ThostFtdcMdApi.h"
 #include "QOperator.h"
 #include "QAccount.h"
+#include "QCalendar.h"
 
 namespace QUtility
 {
@@ -17,10 +18,15 @@ namespace QUtility
         CThostFtdcMdSpi *_spi;
         QOperatorMsg *_pOperaterMsg;
         QAccount *_pAccount;
+        const QSection *_section;
         unsigned int requestId;
 
     public:
-        QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, QAccount *pAccount);
+        QAnalyst(
+            QOperatorMsg *pOperaterMsg,
+            CThostFtdcMdSpi *spi,
+            QAccount *pAccount,
+            const QSection *pSection);
         void go();
         void thread_quit();
         void thread_main();

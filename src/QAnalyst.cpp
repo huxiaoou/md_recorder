@@ -2,13 +2,18 @@
 
 namespace QUtility
 {
-    QAnalyst::QAnalyst(QOperatorMsg *pOperaterMsg, CThostFtdcMdSpi *spi, QAccount *pAccount)
+    QAnalyst::QAnalyst(
+        QOperatorMsg *pOperaterMsg,
+        CThostFtdcMdSpi *spi,
+        QAccount *pAccount,
+        const QSection *pSection)
     {
         _pAccount = pAccount;
         _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());
         _api->RegisterSpi(spi);
         _spi = spi;
         _pOperaterMsg = pOperaterMsg;
+        _section = pSection;
         requestId = 0;
     }
 
@@ -22,13 +27,18 @@ namespace QUtility
 
     void QAnalyst::thread_quit()
     {
-        for (int i = 0; i < 5; i++)
+        while (true)
         {
-            std::cout << "check for quit" << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            QTimestamp tp;
+            std::cout << "... " << tp << ": check for quit" << std::endl;
+            if (tp >= *_section->GetEnd())
+            {
+                MsgNode *x = new MsgNode(ApiState::QUIT);
+                _pOperaterMsg->Push(x);
+                return;
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(180));
         }
-        MsgNode *x = new MsgNode(ApiState::QUIT);
-        _pOperaterMsg->Push(x);
     }
 
     void QAnalyst::thread_main()
@@ -134,14 +144,14 @@ namespace QUtility
 
     void QAnalyst::record(CThostFtdcDepthMarketDataField *pDmd)
     {
-        std::cout << "| "
-                  << pDmd->ActionDay << " | "
-                  << pDmd->TradingDay << " | "
-                  << pDmd->UpdateTime << " | "
-                  << std::setw(3) << pDmd->UpdateMillisec << " | "
-                  << std::setw(6) << pDmd->InstrumentID << " | "
-                  << std::setw(8) << pDmd->LastPrice << " |"
-                  << std::endl;
+        // std::cout << "| "
+        //           << pDmd->ActionDay << " | "
+        //           << pDmd->TradingDay << " | "
+        //           << pDmd->UpdateTime << " | "
+        //           << std::setw(3) << pDmd->UpdateMillisec << " | "
+        //           << std::setw(6) << pDmd->InstrumentID << " | "
+        //           << std::setw(8) << pDmd->LastPrice << " |"
+        //           << std::endl;
     }
 
     void QAnalyst::reqRelease()

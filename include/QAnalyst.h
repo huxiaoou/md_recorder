@@ -8,6 +8,7 @@
 #include "QOperator.h"
 #include "QAccount.h"
 #include "QCalendar.h"
+#include "QAutomatic.h"
 
 namespace QUtility
 {
@@ -18,6 +19,7 @@ namespace QUtility
         CThostFtdcMdSpi *_spi;
         QOperatorMsg *_pOperaterMsg;
         QAccount *_pAccount;
+        QContractsReader *_pContractsReader;
         const QSection *_section;
         unsigned int requestId;
 
@@ -26,6 +28,7 @@ namespace QUtility
             QOperatorMsg *pOperaterMsg,
             CThostFtdcMdSpi *spi,
             QAccount *pAccount,
+            QContractsReader *pContractsReader,
             const QSection *pSection);
         void go();
         void thread_quit();

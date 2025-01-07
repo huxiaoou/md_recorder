@@ -6,9 +6,11 @@ namespace QUtility
         QOperatorMsg *pOperaterMsg,
         CThostFtdcMdSpi *spi,
         QAccount *pAccount,
+        QContractsReader *pContractsReader,
         const QSection *pSection)
     {
         _pAccount = pAccount;
+        _pContractsReader = pContractsReader;
         _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());
         _api->RegisterSpi(spi);
         _spi = spi;
@@ -127,18 +129,7 @@ namespace QUtility
 
     void QAnalyst::reqSubscribe()
     {
-        char *contracts[9] = {
-            (char *)"rb2505",
-            (char *)"hc2505",
-            (char *)"ru2505",
-            (char *)"CF505",
-            (char *)"SR505",
-            (char *)"TA505",
-            (char *)"y2505",
-            (char *)"m2505",
-            (char *)"p2505",
-        };
-        _api->SubscribeMarketData(contracts, 9);
+        _api->SubscribeMarketData(_pContractsReader->GetContracts(), _pContractsReader->GetSize());
         std::cout << "... req to subscribe" << std::endl;
     }
 

@@ -20,6 +20,7 @@ namespace QUtility
         QOperatorMsg *_pOperaterMsg;
         QAccount *_pAccount;
         QContractsReader *_pContractsReader;
+        QWriter *_pWriter;
         const QSection *_section;
         unsigned int requestId;
 
@@ -29,6 +30,7 @@ namespace QUtility
             CThostFtdcMdSpi *spi,
             QAccount *pAccount,
             QContractsReader *pContractsReader,
+            QWriter *pWriter,
             const QSection *pSection);
         void go();
         void thread_quit();

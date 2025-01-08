@@ -7,10 +7,12 @@ namespace QUtility
         CThostFtdcMdSpi *spi,
         QAccount *pAccount,
         QContractsReader *pContractsReader,
+        QWriter *pWriter,
         const QSection *pSection)
     {
         _pAccount = pAccount;
         _pContractsReader = pContractsReader;
+        _pWriter = pWriter;
         _api = CThostFtdcMdApi::CreateFtdcMdApi(_pAccount->GetConsPath());
         _api->RegisterSpi(spi);
         _spi = spi;
@@ -135,14 +137,7 @@ namespace QUtility
 
     void QAnalyst::record(CThostFtdcDepthMarketDataField *pDmd)
     {
-        // std::cout << "| "
-        //           << pDmd->ActionDay << " | "
-        //           << pDmd->TradingDay << " | "
-        //           << pDmd->UpdateTime << " | "
-        //           << std::setw(3) << pDmd->UpdateMillisec << " | "
-        //           << std::setw(6) << pDmd->InstrumentID << " | "
-        //           << std::setw(8) << pDmd->LastPrice << " |"
-        //           << std::endl;
+        _pWriter->Write(pDmd);
     }
 
     void QAnalyst::reqRelease()

@@ -20,10 +20,13 @@ int main()
     {
         QUtility::QAccount *account = new QUtility::QAccount(configMd->GetAccountFilePath());
         account->Display();
+        QUtility::QWriter *writer = new QUtility::QWriter(sec->GetTradeDate(), configMd->GetMdSaveRootDir());
         QUtility::QOperatorMsg *operatorMsg = new QUtility::QOperatorMsg("OperatorMsg");
         QUtility::QListenerMd *listenerMd = new QUtility::QListenerMd(operatorMsg);
+
+        // --- core
         QUtility::QAnalyst *analyst = new QUtility::QAnalyst(
-            operatorMsg, listenerMd, account, contractsReader, sec);
+            operatorMsg, listenerMd, account, contractsReader, writer, sec);
         analyst->go();
     }
 }

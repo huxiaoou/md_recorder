@@ -67,4 +67,42 @@ namespace QUtility
         for (unsigned i = 0; i < _size; i++)
             std::cout << contracts[i] << std::endl;
     }
+
+    QWriter::QWriter(const char *trade_date, const char *mdSaveRootDir)
+    {
+        std::strcpy(_trade_date, trade_date);
+        std::strcpy(_mdSaveRootDir, mdSaveRootDir);
+
+        char pathFile[240];
+        std::strcpy(pathFile, _mdSaveRootDir);
+        if (pathFile[std::strlen(pathFile) - 1] != '/')
+            std::strcat(pathFile, "/");
+        // pathFile = "/mnt/data/trade/ticks/"
+
+        std::strncat(pathFile, _trade_date, 4);
+        std::strcat(pathFile, "/");
+        checkAndMkdir(pathFile);
+        // pathFile = "/mnt/data/trade/ticks/2025/"
+
+        std::strncat(pathFile, _trade_date + 4, 2);
+        std::strcat(pathFile, "/");
+        checkAndMkdir(pathFile);
+        // pathFile = "/mnt/data/trade/ticks/2025/01/"
+
+        char filename[20] = "YYYYMMDD.ticks.csv";
+        std::strncpy(filename, _trade_date, 8);
+        std::strcat(pathFile, filename);
+        // pathFile = "/mnt/data/trade/ticks/2025/01/20250109.ticks.csv"
+
+        std::cout << "... data is saved in:" << pathFile << std::endl;
+        file = fopen(pathFile, "a");
+    }
+
+    void QWriter::Write(const CThostFtdcDepthMarketDataField *pDmd)
+    {
+        fprintf(file, "%s,%s.%03d,%s,%.4f\n",
+                _trade_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
+                pDmd->InstrumentID,
+                pDmd->LastPrice);
+    }
 }

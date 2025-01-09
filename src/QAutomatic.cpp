@@ -68,9 +68,14 @@ namespace QUtility
             std::cout << contracts[i] << std::endl;
     }
 
-    QWriter::QWriter(const char *trade_date, const char *mdSaveRootDir)
+    // ---------------------
+    // ------ QWriter ------
+    // ---------------------
+
+    QWriter::QWriter(const char *mdSaveRootDir, const QSection *section)
     {
-        std::strcpy(_trade_date, trade_date);
+        _section = section;
+        _watch = new QTimestamp();
         std::strcpy(_mdSaveRootDir, mdSaveRootDir);
 
         char pathFile[240];
@@ -79,18 +84,18 @@ namespace QUtility
             std::strcat(pathFile, "/");
         // pathFile = "/mnt/data/trade/ticks/"
 
-        std::strncat(pathFile, _trade_date, 4);
+        std::strncat(pathFile, _section->GetTradeDate(), 4);
         std::strcat(pathFile, "/");
         checkAndMkdir(pathFile);
         // pathFile = "/mnt/data/trade/ticks/2025/"
 
-        std::strncat(pathFile, _trade_date + 4, 2);
+        std::strncat(pathFile, _section->GetTradeDate() + 4, 2);
         std::strcat(pathFile, "/");
         checkAndMkdir(pathFile);
         // pathFile = "/mnt/data/trade/ticks/2025/01/"
 
         char filename[20] = "YYYYMMDD.ticks.csv";
-        std::strncpy(filename, _trade_date, 8);
+        std::strncpy(filename, _section->GetTradeDate(), 8);
         std::strcat(pathFile, filename);
         // pathFile = "/mnt/data/trade/ticks/2025/01/20250109.ticks.csv"
 
@@ -100,9 +105,31 @@ namespace QUtility
 
     void QWriter::Write(const CThostFtdcDepthMarketDataField *pDmd)
     {
-        fprintf(file, "%s,%s.%03d,%s,%.4f\n",
-                _trade_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
-                pDmd->InstrumentID,
-                pDmd->LastPrice);
+        _watch->reSync();
+        const char *action_date = _section->GetTradeDate();
+        if (_section->GetType() == 'N')
+        {
+            if (std::strcmp(pDmd->UpdateTime, "03:00:00") < 0)
+                action_date = _section->GetSecLblNgt1();
+            else
+                action_date = _section->GetSecLblNgt0();
+        }
+
+        fprintf(
+            file, "%ld,%s,%s.%03d,%s,%.4f,%d,%.2f,%.2f,%.4f,%.4f,%.4f,%.4f,%.4f,%d,%.4f,%d\n",
+            _watch->getTs(), action_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
+            pDmd->InstrumentID,
+            pDmd->LastPrice,
+            pDmd->Volume,
+            pDmd->Turnover,
+            pDmd->OpenInterest,
+            pDmd->HighestPrice,
+            pDmd->LowestPrice,
+            pDmd->UpperLimitPrice,
+            pDmd->LowerLimitPrice,
+            pDmd->BidPrice1,
+            pDmd->BidVolume1,
+            pDmd->AskPrice1,
+            pDmd->AskVolume1);
     }
 }

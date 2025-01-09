@@ -24,12 +24,13 @@ namespace QUtility
     class QWriter
     {
     private:
-        char _trade_date[12];
         char _mdSaveRootDir[240];
+        const QSection* _section;
+        QTimestamp* _watch;
         FILE *file;
 
     public:
-        QWriter(const char *trade_date, const char *mdSaveRootDir);
+        QWriter(const char *mdSaveRootDir, const QSection* section);
         void Write(const CThostFtdcDepthMarketDataField *pDmd);
     };
 }

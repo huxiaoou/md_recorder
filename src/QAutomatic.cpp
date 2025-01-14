@@ -132,4 +132,9 @@ namespace QUtility
             pDmd->AskPrice1,
             pDmd->AskVolume1);
     }
+
+    void QWriter::Close()
+    {
+        fclose(file);
+    }
 }

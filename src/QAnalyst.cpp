@@ -142,6 +142,7 @@ namespace QUtility
 
     void QAnalyst::reqRelease()
     {
+        _pWriter->Close();
         if (_api)
         {
             _api->RegisterSpi(NULL);

@@ -124,6 +124,11 @@ namespace QUtility
                 pDmd->AskPrice1 = -1;
         }
 
+        if (pDmd->HighestPrice > 1e9)
+            pDmd->HighestPrice = -1;
+        if (pDmd->LowestPrice > 1e9)
+            pDmd->LowestPrice = -1;
+
         return true;
     }
 

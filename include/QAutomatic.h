@@ -31,7 +31,8 @@ namespace QUtility
 
     public:
         QWriter(const char *mdSaveRootDir, const QSection* section);
-        void Write(const CThostFtdcDepthMarketDataField *pDmd);
+        bool Check(CThostFtdcDepthMarketDataField *pDmd) const;
+        void Write(CThostFtdcDepthMarketDataField *pDmd);
         void Close();
     };
 }

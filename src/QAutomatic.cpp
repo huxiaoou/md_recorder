@@ -103,7 +103,31 @@ namespace QUtility
         file = fopen(pathFile, "a");
     }
 
-    void QWriter::Write(const CThostFtdcDepthMarketDataField *pDmd)
+    bool QWriter::Check(CThostFtdcDepthMarketDataField *pDmd) const
+    {
+        if (pDmd->Volume < 0)
+            return false;
+
+        if (pDmd->BidVolume1 < 0)
+            return false;
+        else
+        {
+            if (pDmd->BidPrice1 > 1e9)
+                pDmd->BidPrice1 = -1;
+        }
+
+        if (pDmd->AskVolume1 < 0)
+            return false;
+        else
+        {
+            if (pDmd->AskPrice1 > 1e9)
+                pDmd->AskPrice1 = -1;
+        }
+
+        return true;
+    }
+
+    void QWriter::Write(CThostFtdcDepthMarketDataField *pDmd)
     {
         _watch->reSync();
         const char *action_date = _section->GetTradeDate();
@@ -115,22 +139,25 @@ namespace QUtility
                 action_date = _section->GetSecLblNgt0();
         }
 
-        fprintf(
-            file, "%ld,%s,%s.%03d,%s,%.4f,%d,%.2f,%.2f,%.4f,%.4f,%.4f,%.4f,%.4f,%d,%.4f,%d\n",
-            _watch->getTs(), action_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
-            pDmd->InstrumentID,
-            pDmd->LastPrice,
-            pDmd->Volume,
-            pDmd->Turnover,
-            pDmd->OpenInterest,
-            pDmd->HighestPrice,
-            pDmd->LowestPrice,
-            pDmd->UpperLimitPrice,
-            pDmd->LowerLimitPrice,
-            pDmd->BidPrice1,
-            pDmd->BidVolume1,
-            pDmd->AskPrice1,
-            pDmd->AskVolume1);
+        if (Check(pDmd))
+        {
+            fprintf(
+                file, "%ld,%s,%s.%03d,%s,%.4f,%d,%.2f,%.2f,%.4f,%.4f,%.4f,%.4f,%.4f,%d,%.4f,%d\n",
+                _watch->getTs(), action_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
+                pDmd->InstrumentID,
+                pDmd->LastPrice,
+                pDmd->Volume,
+                pDmd->Turnover,
+                pDmd->OpenInterest,
+                pDmd->HighestPrice,
+                pDmd->LowestPrice,
+                pDmd->UpperLimitPrice,
+                pDmd->LowerLimitPrice,
+                pDmd->BidPrice1,
+                pDmd->BidVolume1,
+                pDmd->AskPrice1,
+                pDmd->AskVolume1);
+        }
     }
 
     void QWriter::Close()

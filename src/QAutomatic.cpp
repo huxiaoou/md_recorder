@@ -105,25 +105,19 @@ namespace QUtility
 
     bool QWriter::Check(CThostFtdcDepthMarketDataField *pDmd) const
     {
-        if (pDmd->Volume < 0)
+        if ((pDmd->Volume < 0) || (pDmd->BidVolume1 < 0) || (pDmd->AskVolume1 < 0))
             return false;
 
-        if (pDmd->BidVolume1 < 0)
+        if (pDmd->UpdateMillisec < 0 || pDmd->UpdateMillisec > 1000)
             return false;
-        else
-        {
-            if (pDmd->BidPrice1 > 1e9)
-                pDmd->BidPrice1 = -1;
-        }
 
-        if (pDmd->AskVolume1 < 0)
-            return false;
-        else
-        {
-            if (pDmd->AskPrice1 > 1e9)
-                pDmd->AskPrice1 = -1;
-        }
+        // Bid and Ask price
+        if (pDmd->BidPrice1 > 1e9)
+            pDmd->BidPrice1 = -1;
+        if (pDmd->AskPrice1 > 1e9)
+            pDmd->AskPrice1 = -1;
 
+        // Highest and Lowest price
         if (pDmd->HighestPrice > 1e9)
             pDmd->HighestPrice = -1;
         if (pDmd->LowestPrice > 1e9)

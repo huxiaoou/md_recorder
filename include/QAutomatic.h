@@ -25,12 +25,13 @@ namespace QUtility
     {
     private:
         char _mdSaveRootDir[240];
-        const QSection* _section;
-        QTimestamp* _watch;
+        const QSection *_section;
+        QTimestamp *_watch;
         FILE *file;
 
     public:
-        QWriter(const char *mdSaveRootDir, const QSection* section);
+        QWriter(const char *mdSaveRootDir, const QSection *section);
+        const char *GetActionDate(const char *update_time) const;
         bool Check(CThostFtdcDepthMarketDataField *pDmd) const;
         void Write(CThostFtdcDepthMarketDataField *pDmd);
         void Close();

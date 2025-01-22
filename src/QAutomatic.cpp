@@ -105,6 +105,10 @@ namespace QUtility
 
     bool QWriter::Check(CThostFtdcDepthMarketDataField *pDmd) const
     {
+        _watch->reSync();
+        if (!_section->isValid(_watch))
+            return false;
+
         if ((pDmd->Volume < 0) || (pDmd->BidVolume1 < 0) || (pDmd->AskVolume1 < 0))
             return false;
 
@@ -126,20 +130,24 @@ namespace QUtility
         return true;
     }
 
-    void QWriter::Write(CThostFtdcDepthMarketDataField *pDmd)
+    const char *QWriter::GetActionDate(const char *update_time) const
     {
-        _watch->reSync();
-        const char *action_date = _section->GetTradeDate();
         if (_section->GetType() == 'N')
         {
-            if (std::strcmp(pDmd->UpdateTime, "03:00:00") < 0)
-                action_date = _section->GetSecLblNgt1();
+            if (std::strcmp(update_time, "03:00:00") < 0)
+                return _section->GetSecLblNgt1();
             else
-                action_date = _section->GetSecLblNgt0();
+                return _section->GetSecLblNgt0();
         }
+        else
+            return _section->GetSecLblDay();
+    }
 
+    void QWriter::Write(CThostFtdcDepthMarketDataField *pDmd)
+    {
         if (Check(pDmd))
         {
+            const char *action_date = GetActionDate(pDmd->UpdateTime);
             fprintf(
                 file, "%ld,%s,%s.%03d,%s,%.4f,%d,%.2f,%.2f,%.4f,%.4f,%.4f,%.4f,%.4f,%d,%.4f,%d\n",
                 _watch->getTs(), action_date, pDmd->UpdateTime, pDmd->UpdateMillisec,
